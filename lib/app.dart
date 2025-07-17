@@ -11,16 +11,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return MaterialApp(
-      title: 'Simple E-Commerce',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      initialRoute: AppRoutes.splash,
-      routes: AppRoutes.getRoutes(),
+    // Use Consumer to access ThemeProvider
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          title: 'Simple E-Commerce',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          // Corrected themeMode handling
+          themeMode: themeProvider.themeMode,
+          initialRoute: AppRoutes.splash,
+          routes: AppRoutes.getRoutes(),
+        );
+      },
     );
   }
 }

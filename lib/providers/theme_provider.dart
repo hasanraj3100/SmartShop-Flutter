@@ -1,16 +1,13 @@
+// lib/providers/theme_provider.dart
 import 'package:flutter/material.dart';
-import '../core/utils/shared_prefs.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  bool _isDarkMode;
+class ThemeProvider with ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.light;
 
-  ThemeProvider(this._isDarkMode);
+  ThemeMode get themeMode => _themeMode;
 
-  bool get isDarkMode => _isDarkMode;
-
-  void toggleTheme() {
-    _isDarkMode = !_isDarkMode;
-    SharedPrefs.setBool('isDarkMode', _isDarkMode);
+  void toggleTheme(bool isDark) {
+    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
 }

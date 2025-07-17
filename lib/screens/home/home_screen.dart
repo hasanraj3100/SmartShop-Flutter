@@ -6,6 +6,7 @@ import '../../providers/cart_provider.dart';
 import '../../widgets/product_tile.dart';
 import '../../widgets/category_tile.dart';
 import '../../core/routes/app_routes.dart';
+import '../../providers/theme_provider.dart'; // Add ThemeProvider
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -24,49 +27,55 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _logout() {
+    // TODO: Implement logout functionality
+    Navigator.pushReplacementNamed(context, AppRoutes.login);
+    print('User logged out');
+  }
+
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context); // Theme provider
+    final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: TextField(
-                    textAlignVertical: TextAlignVertical.center, // Centered text
-                    decoration: InputDecoration(
-                      hintText: 'Search keywords..',
-                      hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
-                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.only(bottom: 2), // Better alignment
-                    ),
-                    onTap: () {
-                      print('Search bar tapped');
-                    },
-                  ),
-                ),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+        title: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: isDarkMode ? Colors.grey[800] : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: TextField(
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+              hintText: 'Search keywords..',
+              hintStyle: TextStyle(
+                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                  fontSize: 16
               ),
-
-            ],
+              prefixIcon: Icon(Icons.search, color: Colors.grey),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.only(bottom: 2),
+            ),
+            onTap: () {
+              print('Search bar tapped');
+            },
           ),
         ),
-        toolbarHeight: 70, // Reduced height
+
+        toolbarHeight: 70,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
+      drawer: _buildDrawer(context, themeProvider, isDarkMode),
       body: productProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : productProvider.errorMessage != null
@@ -172,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       categoryIcon = Icons.category;
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(right: 30.0),
+                    padding: const EdgeInsets.only(right: 15.0),
                     child: CategoryTile(category: category, icon: categoryIcon),
                   );
                 },
@@ -253,6 +262,95 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.shopping_bag_outlined),
             activeIcon: Icon(Icons.shopping_bag),
             label: '',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context, ThemeProvider themeProvider, bool isDarkMode) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.person,
+                    size: 40,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  'Oasimul Raj',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'raj@example.com',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              // TODO: Navigate to settings
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text('Order History'),
+            onTap: () {
+              // TODO: Navigate to order history
+              Navigator.pop(context);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
+            title: Text(isDarkMode ? 'Light Mode' : 'Dark Mode'),
+            trailing: Switch(
+              value: isDarkMode,
+              onChanged: (value) {
+                themeProvider.toggleTheme(value);
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {
+              Navigator.pop(context);
+              _logout();
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.help),
+            title: const Text('Help & Support'),
+            onTap: () {
+              // TODO: Show help/support
+              Navigator.pop(context);
+            },
           ),
         ],
       ),
