@@ -30,7 +30,7 @@ class AppRoutes {
       // product: (_) => const ProductPage(),
       // category: (_) => const CategoryPage(),
       cart: (_) => const CartScreen(),
-      // favourites: (_) => const FavouritesScreen(),
+      favourites: (_) => const FavouritesScreen(),
       // profile: (_) => const ProfileScreen(),
     };
   }

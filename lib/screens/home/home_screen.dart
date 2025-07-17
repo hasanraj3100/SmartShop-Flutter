@@ -259,6 +259,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if (index == 3) {
             Navigator.of(context).pushNamed(AppRoutes.cart);
           }
+          else if(index == 2) {
+            Navigator.of(context).pushNamed(AppRoutes.favourites);
+          }
         },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
