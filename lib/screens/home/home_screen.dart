@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/product_provider.dart';
-import '../../providers/cart_provider.dart';
+import '../../providers/cart_provider.dart'; // Import CartProvider
 import '../../widgets/product_tile.dart';
 import '../../widgets/category_tile.dart';
 import '../../core/routes/app_routes.dart';
@@ -26,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ProductSortOption _currentSortOption = ProductSortOption.none;
+  int _selectedIndex = 0; // To manage the selected tab in BottomNavigationBar
 
   @override
   void initState() {
@@ -50,10 +51,27 @@ class _HomeScreenState extends State<HomeScreen> {
     print('User logged out');
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    // Handle navigation based on index
+    if (index == 0) {
+      // Already on home, no navigation needed
+    } else if (index == 1) {
+      Navigator.of(context).pushNamed(AppRoutes.profile);
+    } else if (index == 2) {
+      Navigator.of(context).pushNamed(AppRoutes.favourites);
+    } else if (index == 3) {
+      Navigator.of(context).pushNamed(AppRoutes.cart);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context); // Theme provider
+    final cartProvider = Provider.of<CartProvider>(context); // Access CartProvider for item count
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
@@ -184,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios, size: 18),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoutes.category);
+                      Navigator.of(context).pushNamed(AppRoutes.category); // Corrected route
                     },
                   ),
                 ],
@@ -288,42 +306,93 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 3) {
-            Navigator.of(context).pushNamed(AppRoutes.cart);
-          } else if (index == 2) {
-            Navigator.of(context).pushNamed(AppRoutes.favourites);
-          } else if (index == 1) {
-            Navigator.of(context).pushNamed(AppRoutes.profile);
-          }
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0, // Space between FAB and AppBar
+        color: Theme.of(context).bottomAppBarTheme.color ?? (isDarkMode ? Colors.grey[850]! : Colors.white),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            // Home Icon (always outlined, fixed color)
+            _buildBottomNavItem(Icons.home_outlined, 0, _onItemTapped, isDarkMode),
+            // Profile Icon (always outlined, fixed color)
+            _buildBottomNavItem(Icons.person_outline, 1, _onItemTapped, isDarkMode),
+            // Favorites Icon (always outlined, fixed color)
+            _buildBottomNavItem(Icons.favorite_outline, 2, _onItemTapped, isDarkMode),
+            // The cart icon will be handled by the FloatingActionButton
+            const SizedBox(width: 48), // Space for the FAB
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: Consumer<CartProvider>(
+        builder: (context, cartProvider, child) {
+          final cartItemCount = cartProvider.itemCount;
+          return Stack(
+            clipBehavior: Clip.none, // Allows badge to overflow
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  _onItemTapped(3); // Navigate to cart
+                },
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                shape: const CircleBorder(), // Ensures it's a circle
+                child: const Icon(Icons.shopping_bag_outlined),
+              ),
+              if (cartItemCount > 0)
+                Positioned(
+                  right: -5, // Adjust position as needed
+                  top: -5, // Adjust position as needed
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.red, // Badge color
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 1.5), // White border for contrast
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 20,
+                      minHeight: 20,
+                    ),
+                    child: Text(
+                      '$cartItemCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          );
         },
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: '',
+      ),
+    );
+  }
+
+  // Helper method for bottom navigation items (now only takes outline icon)
+  Widget _buildBottomNavItem(IconData icon, int index, Function(int) onTap, bool isDarkMode) {
+    // Icons will always be outlined and grey, regardless of selectedIndex
+    final Color iconColor = isDarkMode ? Colors.grey[400]! : Colors.grey;
+    return Expanded(
+      child: InkWell(
+        onTap: () => onTap(index),
+        child: SizedBox(
+          height: kBottomNavigationBarHeight, // Standard height for nav bar items
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon, // Always use the outline icon
+                color: iconColor,
+              ),
+              // No label as per image
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_outline),
-            activeIcon: Icon(Icons.favorite),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
-            activeIcon: Icon(Icons.shopping_bag),
-            label: '',
-          ),
-        ],
+        ),
       ),
     );
   }
