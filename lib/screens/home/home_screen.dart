@@ -8,6 +8,14 @@ import '../../widgets/category_tile.dart';
 import '../../core/routes/app_routes.dart';
 import '../../providers/theme_provider.dart'; // Add ThemeProvider
 
+enum ProductSortOption {
+  none,
+  priceAsc,
+  priceDesc,
+  ratingAsc,
+  ratingDesc,
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -17,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  ProductSortOption _currentSortOption = ProductSortOption.none;
 
   @override
   void initState() {
@@ -24,6 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.microtask(() {
       Provider.of<ProductProvider>(context, listen: false).fetchProducts();
       Provider.of<ProductProvider>(context, listen: false).fetchCategories();
+    });
+  }
+
+  void _sortProducts(ProductSortOption option) {
+    setState(() {
+      _currentSortOption = option;
+      final productProvider = Provider.of<ProductProvider>(context, listen: false);
+      productProvider.sortProducts(option); // Call sort method on provider
     });
   }
 
@@ -41,59 +58,59 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            color: isDarkMode ? Colors.white : Colors.black,
-          ),
-          title: Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: isDarkMode ? Colors.grey[850] : Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Colors.grey.shade400,
-                width: 1,
-              ),
-              boxShadow: [
-                if (!isDarkMode)
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: TextField(
-                textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black87,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Search products...',
-                  hintStyle: TextStyle(
-                    color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                    fontSize: 16,
-                  ),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.only(bottom: 2),
-                ),
-                onTap: () {
-                  print('Search bar tapped');
-                },
-              ),
-            ),
-          ),
-          toolbarHeight: 70,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
+        title: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: isDarkMode ? Colors.grey[850] : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.grey.shade400,
+              width: 1,
+            ),
+            boxShadow: [
+              if (!isDarkMode)
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: TextField(
+              textAlignVertical: TextAlignVertical.center,
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black87,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                hintStyle: TextStyle(
+                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                  fontSize: 16,
+                ),
+                prefixIcon: Icon(Icons.search, color: Colors.grey),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.only(bottom: 2),
+              ),
+              onTap: () {
+                print('Search bar tapped');
+              },
+            ),
+          ),
+        ),
+        toolbarHeight: 70,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
 
-        drawer: _buildDrawer(context, themeProvider, isDarkMode),
+      drawer: _buildDrawer(context, themeProvider, isDarkMode),
       body: productProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : productProvider.errorMessage != null
@@ -207,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Featured Products Section
+            // Featured Products Section with Sort Options
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: Row(
@@ -219,11 +236,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                    onPressed: () {
-                      print('View all featured products');
-                    },
+                  // Sort Options Dropdown
+                  PopupMenuButton<ProductSortOption>(
+                    icon: Icon(Icons.sort, color: isDarkMode ? Colors.white : Colors.black),
+                    onSelected: _sortProducts,
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<ProductSortOption>>[
+                      const PopupMenuItem<ProductSortOption>(
+                        value: ProductSortOption.none,
+                        child: Text('Default'),
+                      ),
+                      const PopupMenuItem<ProductSortOption>(
+                        value: ProductSortOption.priceAsc,
+                        child: Text('Price: Low to High'),
+                      ),
+                      const PopupMenuItem<ProductSortOption>(
+                        value: ProductSortOption.priceDesc,
+                        child: Text('Price: High to Low'),
+                      ),
+                      const PopupMenuItem<ProductSortOption>(
+                        value: ProductSortOption.ratingDesc,
+                        child: Text('Rating: High to Low'),
+                      ),
+                      const PopupMenuItem<ProductSortOption>(
+                        value: ProductSortOption.ratingAsc,
+                        child: Text('Rating: Low to High'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -258,11 +296,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (index) {
           if (index == 3) {
             Navigator.of(context).pushNamed(AppRoutes.cart);
-          }
-          else if(index == 2) {
+          } else if (index == 2) {
             Navigator.of(context).pushNamed(AppRoutes.favourites);
-          }
-          else if(index == 1) {
+          } else if (index == 1) {
             Navigator.of(context).pushNamed(AppRoutes.profile);
           }
         },

@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import '../data/models/product.dart';
 import '../data/models/category.dart';
+import '../screens/home/home_screen.dart'; // Import ProductSortOption enum from home_screen
 
 class ProductProvider with ChangeNotifier {
   List<Product> _products = [];
@@ -67,5 +68,29 @@ class ProductProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  // New method to sort products based on the selected option
+  void sortProducts(ProductSortOption option) {
+    switch (option) {
+      case ProductSortOption.priceAsc:
+        _products.sort((a, b) => a.price.compareTo(b.price));
+        break;
+      case ProductSortOption.priceDesc:
+        _products.sort((a, b) => b.price.compareTo(a.price));
+        break;
+      case ProductSortOption.ratingAsc:
+        _products.sort((a, b) => a.rating.rate.compareTo(b.rating.rate));
+        break;
+      case ProductSortOption.ratingDesc:
+        _products.sort((a, b) => b.rating.rate.compareTo(a.rating.rate));
+        break;
+      case ProductSortOption.none:
+      // If 'none' is selected, you might want to revert to the original order.
+      // For simplicity, we'll leave it as is, assuming the default fetch order.
+      // If you need to revert, you'd need to store a copy of the original list.
+        break;
+    }
+    notifyListeners(); // Notify listeners to re-render the UI with sorted products
   }
 }
