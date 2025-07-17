@@ -41,42 +41,59 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          color: isDarkMode ? Colors.white : Colors.black,
-        ),
-        title: Container(
-          height: 48,
-          decoration: BoxDecoration(
-            color: isDarkMode ? Colors.grey[800] : Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey.shade300),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+            color: isDarkMode ? Colors.white : Colors.black,
           ),
-          child: TextField(
-            textAlignVertical: TextAlignVertical.center,
-            decoration: InputDecoration(
-              hintText: 'Search keywords..',
-              hintStyle: TextStyle(
-                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                  fontSize: 16
+          title: Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: isDarkMode ? Colors.grey[850] : Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: Colors.grey.shade400,
+                width: 1,
               ),
-              prefixIcon: Icon(Icons.search, color: Colors.grey),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.only(bottom: 2),
+              boxShadow: [
+                if (!isDarkMode)
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+              ],
             ),
-            onTap: () {
-              print('Search bar tapped');
-            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: TextField(
+                textAlignVertical: TextAlignVertical.center,
+                style: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black87,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Search products...',
+                  hintStyle: TextStyle(
+                    color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                    fontSize: 16,
+                  ),
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.only(bottom: 2),
+                ),
+                onTap: () {
+                  print('Search bar tapped');
+                },
+              ),
+            ),
           ),
+          toolbarHeight: 70,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
         ),
 
-        toolbarHeight: 70,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      drawer: _buildDrawer(context, themeProvider, isDarkMode),
+        drawer: _buildDrawer(context, themeProvider, isDarkMode),
       body: productProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : productProvider.errorMessage != null
