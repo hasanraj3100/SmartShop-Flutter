@@ -29,7 +29,7 @@ class AppRoutes {
       home: (_) => const HomeScreen(),
       // product: (_) => const ProductPage(),
       // category: (_) => const CategoryPage(),
-      // cart: (_) => const CartScreen(),
+      cart: (_) => const CartScreen(),
       // favourites: (_) => const FavouritesScreen(),
       // profile: (_) => const ProfileScreen(),
     };
