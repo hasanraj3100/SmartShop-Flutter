@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   image: const DecorationImage(
-                    image: NetworkImage('https://placehold.co/600x200/ADD8E6/FFFFFF?text=20%25+off+on+your+first+purchase'), // Placeholder
+                    image: NetworkImage('https://images.pexels.com/photos/6347533/pexels-photo-6347533.jpeg?_gl=1*of2v7i*_ga*OTU2NzcwMTA0LjE3NTI3NDc4NTY.*_ga_8JE65Q40S6*czE3NTI3NDc4NTUkbzEkZzEkdDE3NTI3NDc5MjQkajU5JGwwJGgw'), // Placeholder
                     fit: BoxFit.cover,
                   ),
                 ),

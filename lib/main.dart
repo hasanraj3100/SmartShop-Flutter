@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartshop/providers/auth_provider.dart';
 import 'package:smartshop/providers/cart_provider.dart';
+import 'package:smartshop/providers/favourites_provider.dart';
 import 'package:smartshop/providers/product_provider.dart';
 
 import 'app.dart';
@@ -25,7 +26,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider(isDarkMode)),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()), 
-        ChangeNotifierProvider(create: (_) => CartProvider())
+        ChangeNotifierProvider(create: (_) => CartProvider()), 
+        ChangeNotifierProvider(create: (_) => FavouritesProvider())
         // Add more providers here later (e.g., AuthProvider)
       ],
       child: const MyApp(),

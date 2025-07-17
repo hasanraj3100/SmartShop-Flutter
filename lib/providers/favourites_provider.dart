@@ -1,29 +1,23 @@
 // lib/providers/favourites_provider.dart
 import 'package:flutter/material.dart';
-import '../data/models/product.dart'; // Import the Product model
+import '../data/models/product.dart';
 
 class FavouritesProvider with ChangeNotifier {
-  final List<Product> _favouriteProducts = [];
+  final List<Product> _favourites = [];
 
-  List<Product> get favouriteProducts => _favouriteProducts;
+  List<Product> get favourites => _favourites;
 
-  // Checks if a product is in the favorites list
-  bool isFavorite(Product product) {
-    // We compare by product ID to ensure uniqueness and correct identification
-    return _favouriteProducts.any((favProduct) => favProduct.id == product.id);
+  bool isFavourite(int productId) {
+    return _favourites.any((product) => product.id == productId);
   }
 
-  // Toggles the favorite status of a product
-  void toggleFavorite(Product product) {
-    if (isFavorite(product)) {
-      // If already a favorite, remove it
-      _favouriteProducts.removeWhere((favProduct) => favProduct.id == product.id);
+  void toggleFavourite(Product product) {
+    final index = _favourites.indexWhere((p) => p.id == product.id);
+    if (index >= 0) {
+      _favourites.removeAt(index);
     } else {
-      // If not a favorite, add it
-      _favouriteProducts.add(product);
+      _favourites.add(product);
     }
-    notifyListeners(); // Notify listeners to update UI
+    notifyListeners();
   }
-
-// You might want to add methods to load/save favorites to SharedPreferences later
 }

@@ -1,17 +1,21 @@
 // lib/widgets/product_tile.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/models/product.dart'; // Assuming your Product model is here
-import '../providers/cart_provider.dart'; // Assuming your CartProvider is here
+import '../data/models/product.dart';
+import '../providers/cart_provider.dart';
+import '../providers/favourites_provider.dart';
 
 class ProductTile extends StatelessWidget {
-  final Product product; // We'll pass a Product object to this tile
+  final Product product;
 
   const ProductTile({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final favouritesProvider = Provider.of<FavouritesProvider>(context); // Listen to changes
+
+    final isFavourite = favouritesProvider.isFavourite(product.id); // Check if product is fav
 
     return Container(
       decoration: BoxDecoration(
@@ -29,60 +33,79 @@ class ProductTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Product Image
+          // Product Image + Heart Button
           Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.network(
-                  product.image, // Use product image
-                  fit: BoxFit.contain, // Use contain to show full image
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network(
-                      'https://placehold.co/100x100/E0BBE4/FFFFFF?text=No+Image',
+            child: Stack(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.network(
+                      product.image,
                       fit: BoxFit.contain,
-                    );
-                  },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.network(
+                          'https://placehold.co/100x100/E0BBE4/FFFFFF?text=No+Image',
+                          fit: BoxFit.contain,
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                // Heart Icon Button
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: () {
+                      favouritesProvider.toggleFavourite(product);
+                    },
+                    child: Icon(
+                      isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavourite ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+
+          // Product Info
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Product Name
                 Text(
-                  product.title, // Use product title
+                  product.title,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                // Product Price
                 Text(
-                  '\$${product.price.toStringAsFixed(2)}', // Use product price
-                  style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                  '\$${product.price.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                // Rating Section
                 Row(
                   children: [
-                    Icon(Icons.star, color: Colors.amber, size: 16),
+                    const Icon(Icons.star, color: Colors.amber, size: 16),
                     Text(
-                      '${product.rating.rate.toStringAsFixed(1)} (${product.rating.count})', // Display rating and count
+                      '${product.rating.rate.toStringAsFixed(1)} (${product.rating.count})',
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                // Add to Cart Button/Icon
                 Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
-                      cartProvider.addToCart(product); // Add product to cart
+                      cartProvider.addToCart(product);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('${product.title} added to cart!')),
                       );

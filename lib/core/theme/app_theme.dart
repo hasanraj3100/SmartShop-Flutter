@@ -20,4 +20,8 @@ class AppTheme {
       foregroundColor: Colors.white,
     ),
   );
+
+  static const Color primaryColor = Color(0xFF5D9CEC);
+  static const Color errorColor = Color(0xFFFF4759);
+  static const Color darkCardColor = Color(0xFF1E293B);
 }
