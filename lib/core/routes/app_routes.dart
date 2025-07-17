@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartshop/screens/product/category_product_page.dart';
 
+import '../../data/models/product.dart';
 import '../../screens/splash/splash_screen.dart';
 import '../../screens/auth/login_screen.dart';
 import '../../screens/auth/register_screen.dart';
@@ -38,6 +39,10 @@ class AppRoutes {
         // Extract arguments for CategoryProductsScreen
         final args = ModalRoute.of(context)!.settings.arguments as String;
         return CategoryProductsScreen(categoryName: args);
+      },
+      product: (context) {
+        final product = ModalRoute.of(context)!.settings.arguments as Product;
+        return ProductPage(product: product);
       },
     };
   }
