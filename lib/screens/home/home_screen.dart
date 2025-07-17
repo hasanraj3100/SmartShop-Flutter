@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       image: const DecorationImage(
-                        image: NetworkImage('https://images.pexels.com/photos/6347533/pexels-photo-6347533.jpeg?_gl=1*of2v7i*_ga*OTU2NzcwMTA0LjE3NTI3NDc4NTY.*_ga_8JE65Q40S6*czE3NTI3NDc5MjQkajU5JGwwJGgw'),
+                        image: AssetImage('banner.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           '20% off on your\nfirst purchase',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
