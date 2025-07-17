@@ -1,15 +1,12 @@
 // lib/data/models/category.dart
 class Category {
   final String name;
-  // Added an optional image field, as it might be useful for UI later
   final String? image;
-  final int? id; // Added optional ID for consistency with Product model
+  final int? id;
 
   Category({required this.name, this.image, this.id});
 
   // Factory constructor to create a Category from a JSON map
-  // Assuming the API returns a list of strings for categories,
-  // we'll adapt this if the API provides more structured category data.
   factory Category.fromJson(String name) {
     return Category(name: name);
   }
@@ -21,5 +18,18 @@ class Category {
       if (image != null) 'image': image,
       if (id != null) 'id': id,
     };
+  }
+
+  // New getter for the 'title' property
+  String get title {
+    if (name.toLowerCase() == "men's clothing") {
+      return "Men's";
+    } else if (name.toLowerCase() == "women's clothing") {
+      return "Women's";
+    } else if (name.isNotEmpty) {
+      // Capitalize the first letter of the name
+      return name[0].toUpperCase() + name.substring(1);
+    }
+    return ''; // Return empty string or handle as appropriate for empty names
   }
 }

@@ -33,7 +33,7 @@ class CategoryTile extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            category.name, // Use category name
+            category.title, // Use category name
             style: const TextStyle(fontSize: 12),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

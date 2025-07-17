@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       categoryIcon = Icons.category;
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
+                    padding: const EdgeInsets.only(right: 30.0),
                     child: CategoryTile(category: category, icon: categoryIcon),
                   );
                 },
