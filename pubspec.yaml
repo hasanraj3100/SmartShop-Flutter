@@ -50,8 +50,7 @@ dependencies:
   # Basic UI/UX enhancements
   flutter_svg: ^2.0.10    # For SVG icons if needed
   google_fonts: ^6.2.1    # If you want custom fonts
-  shimmer: ^3.0.0
-  cached_network_image: ^3.4.1
+
 
 dev_dependencies:
   flutter_test:

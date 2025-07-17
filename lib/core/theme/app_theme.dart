@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData get lightTheme => ThemeData(
@@ -9,6 +10,7 @@ class AppTheme {
       backgroundColor: Colors.blue,
       foregroundColor: Colors.white,
     ),
+    fontFamily: GoogleFonts.poppins().fontFamily
   );
 
   static ThemeData get darkTheme => ThemeData(
@@ -21,7 +23,4 @@ class AppTheme {
     ),
   );
 
-  static const Color primaryColor = Color(0xFF5D9CEC);
-  static const Color errorColor = Color(0xFFFF4759);
-  static const Color darkCardColor = Color(0xFF1E293B);
 }
