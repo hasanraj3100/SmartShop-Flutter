@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios, size: 18),
                     onPressed: () {
-                      print('View all categories');
+                      Navigator.of(context).pushNamed(AppRoutes.category);
                     },
                   ),
                 ],
@@ -261,6 +261,9 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           else if(index == 2) {
             Navigator.of(context).pushNamed(AppRoutes.favourites);
+          }
+          else if(index == 1) {
+            Navigator.of(context).pushNamed(AppRoutes.profile);
           }
         },
         items: const <BottomNavigationBarItem>[

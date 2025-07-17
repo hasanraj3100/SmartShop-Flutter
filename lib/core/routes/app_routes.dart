@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartshop/screens/product/category_product_page.dart';
 
 import '../../screens/splash/splash_screen.dart';
 import '../../screens/auth/login_screen.dart';
@@ -20,6 +21,7 @@ class AppRoutes {
   static const cart = '/cart';
   static const favourites = '/favourites';
   static const profile = '/profile';
+  static const categoryProducts = '/category_products';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -28,10 +30,15 @@ class AppRoutes {
       // register: (_) => const RegisterScreen(),
       home: (_) => const HomeScreen(),
       // product: (_) => const ProductPage(),
-      // category: (_) => const CategoryPage(),
+      category: (_) => const CategoryPage(),
       cart: (_) => const CartScreen(),
       favourites: (_) => const FavouritesScreen(),
-      // profile: (_) => const ProfileScreen(),
+      profile: (_) => const ProfileScreen(),
+      categoryProducts: (context) {
+        // Extract arguments for CategoryProductsScreen
+        final args = ModalRoute.of(context)!.settings.arguments as String;
+        return CategoryProductsScreen(categoryName: args);
+      },
     };
   }
 }

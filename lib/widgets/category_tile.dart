@@ -1,6 +1,7 @@
 // lib/widgets/category_tile.dart
 import 'package:flutter/material.dart';
 import '../data/models/category.dart'; // Assuming your Category model is here
+import '../core/routes/app_routes.dart'; // Import AppRoutes for navigation
 
 class CategoryTile extends StatelessWidget {
   final Category category; // We'll pass a Category object to this tile
@@ -12,8 +13,11 @@ class CategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO: Implement navigation to category product list
-        print('Tapped on category: ${category.name}');
+        // Navigate to CategoryProductsScreen, passing the category name
+        Navigator.of(context).pushNamed(
+          AppRoutes.categoryProducts,
+          arguments: category.name, // Pass the full category name
+        );
       },
       child: Column(
         children: [
@@ -23,7 +27,7 @@ class CategoryTile extends StatelessWidget {
             child: icon != null
                 ? Icon(icon, color: Theme.of(context).primaryColor)
                 : Text(
-              category.name[0].toUpperCase(), // Use first letter if no icon
+              category.title[0].toUpperCase(), // Use first letter of title if no icon
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
@@ -33,7 +37,7 @@ class CategoryTile extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            category.title, // Use category name
+            category.title, // Use category title
             style: const TextStyle(fontSize: 12),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
