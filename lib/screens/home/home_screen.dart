@@ -31,10 +31,38 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Listen to route changes to update selectedIndex
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateSelectedIndex();
+    });
     Future.microtask(() {
       Provider.of<ProductProvider>(context, listen: false).fetchProducts();
       Provider.of<ProductProvider>(context, listen: false).fetchCategories();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Update selected index when route changes (e.g., pop back)
+    _updateSelectedIndex();
+  }
+
+  void _updateSelectedIndex() {
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+    int newIndex = 0; // Default to Home
+    if (currentRoute == AppRoutes.profile) {
+      newIndex = 1;
+    } else if (currentRoute == AppRoutes.favourites) {
+      newIndex = 2;
+    } else if (currentRoute == AppRoutes.cart) {
+      newIndex = 3;
+    }
+    if (_selectedIndex != newIndex) {
+      setState(() {
+        _selectedIndex = newIndex;
+      });
+    }
   }
 
   void _sortProducts(ProductSortOption option) {
@@ -52,18 +80,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Handle navigation based on index
-    if (index == 0) {
-      // Already on home, no navigation needed
-    } else if (index == 1) {
-      Navigator.of(context).pushNamed(AppRoutes.profile);
-    } else if (index == 2) {
-      Navigator.of(context).pushNamed(AppRoutes.favourites);
-    } else if (index == 3) {
-      Navigator.of(context).pushNamed(AppRoutes.cart);
+    // Only navigate if the tapped index is different from the current selected index
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+      // Handle navigation based on index
+      if (index == 0) {
+        // Already on home, no navigation needed, but pop other routes if any
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else if (index == 1) {
+        Navigator.of(context).pushNamed(AppRoutes.profile);
+      } else if (index == 2) {
+        Navigator.of(context).pushNamed(AppRoutes.favourites);
+      } else if (index == 3) {
+        Navigator.of(context).pushNamed(AppRoutes.cart);
+      }
     }
   }
 
@@ -313,12 +345,33 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            // Home Icon (always outlined, fixed color)
-            _buildBottomNavItem(Icons.home_outlined, 0, _onItemTapped, isDarkMode),
-            // Profile Icon (always outlined, fixed color)
-            _buildBottomNavItem(Icons.person_outline, 1, _onItemTapped, isDarkMode),
-            // Favorites Icon (always outlined, fixed color)
-            _buildBottomNavItem(Icons.favorite_outline, 2, _onItemTapped, isDarkMode),
+            // Home Icon
+            _buildBottomNavItem(
+              outlineIcon: Icons.home_outlined,
+              filledIcon: Icons.home,
+              index: 0,
+              onTap: _onItemTapped,
+              isDarkMode: isDarkMode,
+              isSelected: _selectedIndex == 0, // Pass isSelected state
+            ),
+            // Profile Icon
+            _buildBottomNavItem(
+              outlineIcon: Icons.person_outline,
+              filledIcon: Icons.person,
+              index: 1,
+              onTap: _onItemTapped,
+              isDarkMode: isDarkMode,
+              isSelected: _selectedIndex == 1, // Pass isSelected state
+            ),
+            // Favorites Icon
+            _buildBottomNavItem(
+              outlineIcon: Icons.favorite_outline,
+              filledIcon: Icons.favorite,
+              index: 2,
+              onTap: _onItemTapped,
+              isDarkMode: isDarkMode,
+              isSelected: _selectedIndex == 2, // Pass isSelected state
+            ),
             // The cart icon will be handled by the FloatingActionButton
             const SizedBox(width: 48), // Space for the FAB
           ],
@@ -373,10 +426,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Helper method for bottom navigation items (now only takes outline icon)
-  Widget _buildBottomNavItem(IconData icon, int index, Function(int) onTap, bool isDarkMode) {
-    // Icons will always be outlined and grey, regardless of selectedIndex
-    final Color iconColor = isDarkMode ? Colors.grey[400]! : Colors.grey;
+  // Helper method for bottom navigation items
+  Widget _buildBottomNavItem({
+    required IconData outlineIcon,
+    required IconData filledIcon,
+    required int index,
+    required Function(int) onTap,
+    required bool isDarkMode,
+    required bool isSelected, // New parameter to control highlighting
+  }) {
+    final Color iconColor = isSelected
+        ? (isDarkMode ? Colors.white : Colors.black) // Darker/white for selected
+        : (isDarkMode ? Colors.grey[400]! : Colors.grey); // Grey for unselected
     return Expanded(
       child: InkWell(
         onTap: () => onTap(index),
@@ -386,8 +447,9 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                icon, // Always use the outline icon
+                isSelected ? filledIcon : outlineIcon,
                 color: iconColor,
+                weight: isSelected ? 700 : 400, // Make selected icon thicker
               ),
               // No label as per image
             ],
