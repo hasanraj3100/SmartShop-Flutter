@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
         title: Container(
           height: 48,
