@@ -101,23 +101,26 @@ class ProductTile extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      cartProvider.addToCart(product);
+                Container(
+                  width: double.infinity, // Take full width
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      cartProvider.addToCart(product); // Add product to cart
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('${product.title} added to cart!')),
                       );
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Theme.of(context).primaryColor, // Text and icon color
+                      side: BorderSide(color: Theme.of(context).primaryColor), // Border color
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(Icons.add_shopping_cart, color: Colors.white, size: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
+                    icon: const Icon(Icons.shopping_bag_outlined, size: 20),
+                    label: const Text('Add to cart', style: TextStyle(fontSize: 14)),
                   ),
                 ),
               ],
