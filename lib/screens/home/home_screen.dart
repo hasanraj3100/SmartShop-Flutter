@@ -198,23 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 10,
-                    left: 20,
-                    child: Row(
-                      children: List.generate(3, (index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          width: index == 0 ? 12 : 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: index == 0 ? Colors.black : Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
+
                 ],
               ),
             ),

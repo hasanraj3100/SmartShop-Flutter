@@ -28,9 +28,8 @@ class AppRoutes {
     return {
       splash: (_) => const SplashScreen(),
       login: (_) => const LoginScreen(),
-      // register: (_) => const RegisterScreen(),
+      register: (_) => const RegisterScreen(),
       home: (_) => const HomeScreen(),
-      // product: (_) => const ProductPage(),
       category: (_) => const CategoryPage(),
       cart: (_) => const CartScreen(),
       favourites: (_) => const FavouritesScreen(),
