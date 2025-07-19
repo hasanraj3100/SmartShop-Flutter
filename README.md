@@ -38,6 +38,7 @@ This project demonstrates best practices in Flutter development, including state
 ## Screenshots
 
 <img src="screenshots/smartshop_login_page.jpg" width="250"/> <img src="screenshots/smartshop_register_page.jpg" width="250"/> 
+<<<<<<< Updated upstream
 
 ![Home](screenshots/smartshop_home_page.jpg) ![Product Page](screenshots/smartshop_product_page.jpg)
 ![Sort Product](screenshots/smartshop_sorting.jpg) ![Cart](screenshots/smartshop_cart.jpg) 
@@ -45,6 +46,11 @@ This project demonstrates best practices in Flutter development, including state
 
 
 
+=======
+<img src="screenshots/smartshop_home_page.jpg" width="250"/><img src="screenshots/smartshop_product_page.jpg" width="250"/>
+<img src="screenshots/smartshop_sorting.jpg" width="250"/><img src="screenshots/smartshop_cart.jpg" width="250"/>
+<img src="screenshots/smartshop_favourite.jpg" width="250"/><img src="screenshots/smartshop_home_dark.jpg" width="250"/>
+>>>>>>> Stashed changes
 
 ## Video Demo
 
