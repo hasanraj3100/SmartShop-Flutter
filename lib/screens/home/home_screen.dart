@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _logout() {
-    // TODO: Implement logout functionality
+    Navigator.pushReplacementNamed(context, AppRoutes.login);
     Navigator.pushReplacementNamed(context, AppRoutes.login);
     print('User logged out');
   }
