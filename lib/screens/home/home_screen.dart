@@ -1,12 +1,13 @@
 // lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/product_provider.dart';
-import '../../providers/cart_provider.dart'; // Import CartProvider
+import '../../providers/cart_provider.dart'; 
 import '../../widgets/product_tile.dart';
 import '../../widgets/category_tile.dart';
 import '../../core/routes/app_routes.dart';
-import '../../providers/theme_provider.dart'; // Add ThemeProvider
+import '../../providers/theme_provider.dart'; 
 
 enum ProductSortOption {
   none,
@@ -26,12 +27,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ProductSortOption _currentSortOption = ProductSortOption.none;
-  int _selectedIndex = 0; // To manage the selected tab in BottomNavigationBar
+  int _selectedIndex = 0; 
 
   @override
   void initState() {
     super.initState();
-    // Listen to route changes to update selectedIndex
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateSelectedIndex();
     });
@@ -74,9 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _logout() {
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.logout();
     Navigator.pushReplacementNamed(context, AppRoutes.login);
-    Navigator.pushReplacementNamed(context, AppRoutes.login);
-    print('User logged out');
   }
 
   void _onItemTapped(int index) {
@@ -102,8 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-    final themeProvider = Provider.of<ThemeProvider>(context); // Theme provider
-    final cartProvider = Provider.of<CartProvider>(context); // Access CartProvider for item count
+    final themeProvider = Provider.of<ThemeProvider>(context); 
+    final cartProvider = Provider.of<CartProvider>(context); 
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
@@ -179,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       image: const DecorationImage(
-                        image: AssetImage('banner.png'),
+                        image: AssetImage('assets/banner.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -218,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios, size: 18),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoutes.category); // Corrected route
+                      Navigator.of(context).pushNamed(AppRoutes.category); 
                     },
                   ),
                 ],
@@ -336,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
               index: 0,
               onTap: _onItemTapped,
               isDarkMode: isDarkMode,
-              isSelected: _selectedIndex == 0, // Pass isSelected state
+              isSelected: _selectedIndex == 0, 
             ),
             // Profile Icon
             _buildBottomNavItem(
@@ -345,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
               index: 1,
               onTap: _onItemTapped,
               isDarkMode: isDarkMode,
-              isSelected: _selectedIndex == 1, // Pass isSelected state
+              isSelected: _selectedIndex == 1, 
             ),
             // Favorites Icon
             _buildBottomNavItem(
@@ -354,10 +355,9 @@ class _HomeScreenState extends State<HomeScreen> {
               index: 2,
               onTap: _onItemTapped,
               isDarkMode: isDarkMode,
-              isSelected: _selectedIndex == 2, // Pass isSelected state
+              isSelected: _selectedIndex == 2, 
             ),
-            // The cart icon will be handled by the FloatingActionButton
-            const SizedBox(width: 48), // Space for the FAB
+            const SizedBox(width: 48), 
           ],
         ),
       ),
@@ -417,11 +417,11 @@ class _HomeScreenState extends State<HomeScreen> {
     required int index,
     required Function(int) onTap,
     required bool isDarkMode,
-    required bool isSelected, // New parameter to control highlighting
+    required bool isSelected, 
   }) {
     final Color iconColor = isSelected
-        ? (isDarkMode ? Colors.white : Colors.black) // Darker/white for selected
-        : (isDarkMode ? Colors.grey[400]! : Colors.grey); // Grey for unselected
+        ? (isDarkMode ? Colors.white : Colors.black) 
+        : (isDarkMode ? Colors.grey[400]! : Colors.grey); 
     return Expanded(
       child: InkWell(
         onTap: () => onTap(index),

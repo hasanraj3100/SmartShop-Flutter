@@ -1,8 +1,8 @@
 // lib/screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart'; // Assuming this path
-import '../../core/routes/app_routes.dart'; // Assuming this path for navigation
+import '../../providers/auth_provider.dart'; 
+import '../../core/routes/app_routes.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); // Key for form validation
+  final _formKey = GlobalKey<FormState>(); 
   bool _rememberMe = false;
   bool _isPasswordVisible = false;
 
@@ -41,20 +41,19 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      try {
-        await authProvider.login(email, password);
-        // If login is successful, navigate to home screen
-        if (mounted) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar(); // Hide loading
+      final bool loginSuccess = authProvider.login(email, password); // Check the boolean return
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar(); // Hide loading snackbar
+
+        if (loginSuccess) {
+          // If login is successful, navigate to home screen
           Navigator.of(context).pushReplacementNamed(AppRoutes.home); // Navigate to home
-        }
-      } catch (e) {
-        // Handle login errors
-        if (mounted) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar(); // Hide loading
+        } else {
+          // Handle login errors (incorrect credentials)
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login failed: ${e.toString()}'),
+            const SnackBar(
+              content: Text('Login failed: Invalid email or password.'),
               backgroundColor: Colors.red,
             ),
           );
@@ -76,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: MediaQuery.of(context).size.height * 0.4,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('Auth1-login.png'), // Your local image
+                      image: AssetImage('assets/Auth1-login.png'), // Your local image
                       fit: BoxFit.cover,
                       onError: (exception, stackTrace) {
                         debugPrint('Error loading asset image: $exception');

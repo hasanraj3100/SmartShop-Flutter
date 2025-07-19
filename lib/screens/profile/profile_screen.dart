@@ -67,13 +67,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // No need for isDarkMode check here as we directly use Theme.of(context)
-    // final themeProvider = Provider.of<ThemeProvider>(context);
-    // final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
-    // Define colors directly from Theme.of(context)
     final textColor = Theme.of(context).colorScheme.onSurface;
-    // For secondary text/hint text, use onSurface with opacity
     final secondaryTextColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.7);
     final dividerColor = Theme.of(context).dividerColor;
 

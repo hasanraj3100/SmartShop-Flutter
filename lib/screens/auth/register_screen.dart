@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
-      final String phoneNumber = _phoneController.text.trim(); // You might want to use this
+      final String phoneNumber = _phoneController.text.trim(); 
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -42,13 +42,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       try {
-        await authProvider.register(email, password); // Assuming AuthProvider has a register method
+        await authProvider.register(email, password); 
         if (mounted) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Registration successful! Please login.')),
           );
-          Navigator.of(context).pushReplacementNamed(AppRoutes.login); // Navigate to login after registration
+          Navigator.of(context).pushReplacementNamed(AppRoutes.login); 
         }
       } catch (e) {
         if (mounted) {
@@ -69,12 +69,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
-    // Define colors directly from Theme.of(context)
     final textColor = Theme.of(context).colorScheme.onSurface;
     final secondaryTextColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.7);
-    // inputFillColor and inputBorderColor are handled by InputDecorationTheme
-    // in app_theme.dart, so direct access here might not be necessary for styling
-    // unless you need to explicitly use them for a Container wrapping the TextFormField.
 
 
     return Scaffold(
@@ -89,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('signup-page-image.png'), // Your local asset image
+                    image: AssetImage('assets/signup-page-image.png'), 
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -200,7 +196,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: 'Enter your phone number',
                             hintStyle: TextStyle(color: secondaryTextColor),
                             prefixIcon: Icon(Icons.phone_outlined, color: secondaryTextColor),
-                            // Border and fillColor are handled by InputDecorationTheme
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
