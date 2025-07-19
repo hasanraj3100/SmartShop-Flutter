@@ -44,15 +44,19 @@ _Example: Home screen showing featured products._
 
 ![Product Detail Demo](screenshots/product_detail_demo.png)
 
-Product Page: 
-![Product Page](screenshots/smartshop_product_page.jpg)
+![Login](screenshots/smartshop_login_page.jpg) ![Register](screenshots/smartshop_register_page.jpg) 
+![Home](screenshots/smartshop_home_page.jpg) ![Product Page](screenshots/smartshop_product_page.jpg)
+![Sort Product](screenshots/smartshop_sorting.jpg) ![Cart](screenshots/smartshop_cart.jpg) 
+![favourites](screenshots/smartshop_favourite.jpg) [!dark](screenshots/smartshop_home_dark.jpg)
+
+
 
 
 ## Video Demo
 
 See SmartShop in action! Watch a full walkthrough of the app's features and user experience on YouTube:
 
-[![Watch the demo video](https://img.youtube.com/vi/g34eJb964_8/hqdefault.jpg)](https://www.youtube.com/watch?v=g34eJb964_8)
+![Watch the demo video][screenshots/thumbnail.jpg](https://www.youtube.com/watch?v=g34eJb964_8)
 
 ## Technologies Used
 
