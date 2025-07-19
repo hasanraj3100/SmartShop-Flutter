@@ -37,13 +37,7 @@ This project demonstrates best practices in Flutter development, including state
 
 ## Screenshots
 
-To add your screenshots, replace the example below with your actual image paths and descriptive alt text. Make sure your `screenshots` directory is at the root of your project.
-
-![Home Screen Demo](screenshots/home_screen_demo.png)
-_Example: Home screen showing featured products._
-
-![Product Detail Demo](screenshots/product_detail_demo.png)
-
+<img src="screenshots/smartshop_login_page.jpg" width="300"/>
 ![Login](screenshots/smartshop_login_page.jpg) ![Register](screenshots/smartshop_register_page.jpg) 
 ![Home](screenshots/smartshop_home_page.jpg) ![Product Page](screenshots/smartshop_product_page.jpg)
 ![Sort Product](screenshots/smartshop_sorting.jpg) ![Cart](screenshots/smartshop_cart.jpg) 
