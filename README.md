@@ -35,12 +35,6 @@ This project demonstrates best practices in Flutter development, including state
 * **Global Theming:** Full support for Light and Dark modes, leveraging Flutter's theming system and a custom `AppTheme` with the elegant Poppins font.
 * **Responsive UI:** Adapts gracefully to different screen sizes and orientations.
 
-## Screenshots
-
-<img src="screenshots/smartshop_login_page.jpg" width="250"/> <img src="screenshots/smartshop_register_page.jpg" width="250"/> 
-<img src="screenshots/smartshop_home_page.jpg" width="250"/><img src="screenshots/smartshop_product_page.jpg" width="250"/>
-<img src="screenshots/smartshop_sorting.jpg" width="250"/><img src="screenshots/smartshop_cart.jpg" width="250"/>
-<img src="screenshots/smartshop_favourite.jpg" width="250"/><img src="screenshots/smartshop_home_dark.jpg" width="250"/>
 
 ## Video Demo
 
@@ -108,6 +102,12 @@ To get a local copy up and running, follow these simple steps.
 * **Favorites:** Tap the heart icon on any product to add/remove it from your favorites.
 * **Toggle Theme:** Use the drawer menu to switch between Light and Dark modes.
 
+## Screenshots
+
+<img src="screenshots/smartshop_login_page.jpg" width="250"/> <img src="screenshots/smartshop_register_page.jpg" width="250"/> 
+<img src="screenshots/smartshop_home_page.jpg" width="250"/><img src="screenshots/smartshop_product_page.jpg" width="250"/>
+<img src="screenshots/smartshop_sorting.jpg" width="250"/><img src="screenshots/smartshop_cart.jpg" width="250"/>
+<img src="screenshots/smartshop_favourite.jpg" width="250"/><img src="screenshots/smartshop_home_dark.jpg" width="250"/>
 ## Contributing
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
